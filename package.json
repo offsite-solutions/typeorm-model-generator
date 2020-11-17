@@ -1,8 +1,10 @@
 {
-  "name": "typeorm-model-generator",
+  "name": "@offsite/typeorm-model-generator-abstract",
   "version": "0.4.4",
   "description": "Generates models for TypeORM from existing databases.",
-  "bin": "bin/typeorm-model-generator",
+  "bin": {
+    "typeorm-model-generator-abstract": "bin/typeorm-model-generator"
+  },
   "main": "./dist/src/library.js",
   "types": "./dist/src/library.d.ts",
   "scripts": {
@@ -101,5 +103,8 @@
     "include": [
       "src/**/!(*.test.*).[tj]s?(x)"
     ]
+  },
+  "directories": {
+    "test": "test"
   }
 }
