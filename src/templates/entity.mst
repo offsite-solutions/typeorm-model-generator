@@ -5,8 +5,17 @@
 import {{localImport (toEntityName .)}} from './{{toFileName .}}'
 {{/inline}}
 {{#*inline "Column"}}
-{{#generated}}@PrimaryGeneratedColumn({ type:"{{type}}", {{/generated}}{{^generated}}@Column("{{type}}",{ {{#primary}}primary:{{primary}},{{/primary}}{{/generated}}{{json options}}{{#default}},default: {{.}},{{/default}} })
+{{#versioned}}@VersionColumn({ {{/versioned}}{{#generated}}@PrimaryGeneratedColumn({ type:"{{type}}", {{/generated}}{{#regular}}@Column("{{type}}",{ {{#primary}}primary:{{primary}},{{/primary}}{{/regular}}{{#sequenced}}@Column("{{type}}",{ {{#primary}}primary:{{primary}},{{/primary}}{{/sequenced}}{{json options}}{{#default}},default: {{.}},{{/default}} })
 {{printPropertyVisibility}}{{toPropertyName tscName}}{{strictMode}}:{{tscType}}{{#if options.nullable}} | null{{/if}};
+
+{{#sequenced}}
+  @BeforeInsert()
+  async getSequence() {
+    const sequenceName = '{{sequenceName}}';
+    const nextVal = await getManager().query(`select nextval('${sequenceName}') as id`);
+    this.id = nextVal[0].id;
+  }
+{{/sequenced}}
 
 {{/inline}}
 {{#*inline "JoinColumnOptions"}}
@@ -41,7 +50,8 @@ export{{defaultExport}}{{#exportAbstractClass}} abstract{{/exportAbstractClass}}
 {{#if generateConstructor}}{{>Constructor entityName=tscName}}{{/if~}}
 }
 {{/inline}}
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId,VersionColumn,BeforeInsert} from "typeorm";
+import {getManager} from "typeorm";
 {{#unless skipRelationships}}{{#fileImports}}{{> Import}}{{/fileImports}}{{/unless}}
 {{#extendAbstractClass}}import BaseClass from "{{.}}";{{/extendAbstractClass}}
 

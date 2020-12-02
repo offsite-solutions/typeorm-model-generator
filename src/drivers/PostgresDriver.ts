@@ -111,6 +111,19 @@ export default class PostgresDriver extends AbstractDriver {
                         resp.isidentity === "YES" || resp.is_identity === "YES"
                             ? true
                             : undefined;
+
+                    const sequenced =
+                        resp.column_name === "id" && !generated
+                            ? true
+                            : undefined;
+
+                    const sequenceName = sequenced
+                        ? "seq_" + resp.table_name.toLowerCase()
+                        : undefined;
+
+                    const versioned =
+                        resp.column_name === "version" ? true : undefined;
+
                     const defaultValue = generated
                         ? undefined
                         : PostgresDriver.ReturnDefaultValueFunction(
@@ -187,6 +200,10 @@ export default class PostgresDriver extends AbstractDriver {
                         options,
                         tscName,
                         tscType,
+                        sequenced,
+                        sequenceName,
+                        versioned,
+                        regular: !generated && !sequenced && !versioned,
                     });
                 });
         });

@@ -9,6 +9,10 @@ export type Column = {
 
     primary?: boolean;
     generated?: true | "increment" | "uuid";
+    sequenced?: boolean;
+    sequenceName?: string;
+    versioned?: boolean;
+    regular?: boolean;
     default?: string; // ?
     options: {
         name: string;

@@ -1,6 +1,6 @@
 {
   "name": "@offsite/typeorm-model-generator-abstract",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Generates models for TypeORM from existing databases.",
   "bin": {
     "typeorm-model-generator-abstract": "bin/typeorm-model-generator"
@@ -8,7 +8,7 @@
   "main": "./dist/src/library.js",
   "types": "./dist/src/library.d.ts",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "ts-node ./src/index.ts -h localhost -p 5435 -d ww_dev -u ww_dev -x fdgHbvcf5tR -e postgres -s public",
     "build": "npm run clean && tsc && ncp src/templates/ dist/src/templates/ && ncp package.json dist/package.json",
     "prepare": "npm run build",
     "pretest": "tsc --noEmit",
